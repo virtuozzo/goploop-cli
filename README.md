@@ -24,6 +24,7 @@ The following methods are currently not implemented, compared to goploop:
 The following methods differ:
 * ``GetFSInfo()`` returns BlockSize=1K instead of actual filesystem block size
 * ``Resize()`` ignores ``offline`` argument (ploop tool automatically chooses whether to do online or offline resize)
+* ``UUID()`` is implemented in pure Go
 
 ## What is ploop?
 
