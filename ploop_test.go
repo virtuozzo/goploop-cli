@@ -302,7 +302,9 @@ func TestImageInfo(t *testing.T) {
 
 func cleanup() {
 	if d.dd != "" {
-		d.Umount()
+		if m, _ := d.IsMounted(); m {
+			d.Umount()
+		}
 		d.Close()
 	}
 	if old_pwd != "" {
