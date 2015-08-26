@@ -2,12 +2,12 @@
 
 This is a Go wrapper for [ploop](https://github.com/kolyshkin/ploop),
 a command line tool to manage ploop. It is designed to be a drop-in
-replacement for [goploop]((https://github.com/kolyshkin/goploop) for
+replacement for [goploop](https://github.com/kolyshkin/goploop) for
 those who don't like goploop build/link dependencies on a few C libraries.
 
 ## Changes from goploop
 
-The differences between this package and [goploop]((https://github.com/kolyshkin/goploop)
+The differences between this package and [goploop](https://github.com/kolyshkin/goploop)
 are:
 
 * goploop calls ploop C library, while goploop-cli calls ploop command line tool
@@ -23,7 +23,7 @@ The following methods are currently not implemented, compared to goploop:
 
 The following methods differ:
 * ``GetFSInfo()`` returns BlockSize=1K instead of actual filesystem block size
-* ``Resize()`` only accepts offline=false (i.e. it can only do online resize)
+* ``Resize()`` ignores ``offline`` argument (ploop tool automatically chooses whether to do online or offline resize)
 
 ## What is ploop?
 
@@ -59,6 +59,6 @@ For primitive examples of how to use the package, see [ploop_test.go](ploop_test
 ## See also
 
 * [goploop](https://github.com/kolyshkin/goploop) -- an alternative implementation using libploop
-* [Ploop](https://openvz.org/Ploop) -- information about ploop
+* [openvz.org/Ploop](https://openvz.org/Ploop) -- more information about ploop
 * [ploop(8)](https://openvz.org/Man/ploop.8) man page
 * [OpenVZ](https://openvz.org)
