@@ -13,13 +13,14 @@ are:
 * goploop calls ploop C library, while goploop-cli calls ploop command line tool
 * goploop has a few build time dependencies, goploop-cli has no such requirements
 * goploop has no runtime dependencies if built statically; goploop-cli requires ploop tool during runtime
-* goploop is probably more efficient than goploop-cli
+* goploop is probably more efficient than goploop-cli (as latter has to do fork/exec), although practically the overhead is negligible compared to time it takes for most ploop operations
 * goploop-cli currently have some limitations (see below)
 
-The following methods are currently not implemented, compared to goploop:
+Due to command line tool limitations, the following methods are currently not implemented, as compared to goploop:
 * ``SetVerboseLevel()`` don't do anything
 * ``SetLogFile()`` and ``SetLogLevel()`` are missing
 * ``GetTopDelta()`` is missing
+* ``SnapshotSwitchExtended()`` is missing
 
 The following methods differ:
 * ``GetFSInfo()`` returns BlockSize=1K instead of actual filesystem block size
