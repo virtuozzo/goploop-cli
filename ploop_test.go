@@ -40,21 +40,23 @@ func chk(err error) {
 	}
 }
 
-func TestPrepare(t *testing.T) {
+func prepare(dir string) {
 	var err error
 
 	old_pwd, err = os.Getwd()
 	chk(err)
 
-	test_dir, err = ioutil.TempDir(old_pwd, "tmp-test")
+	test_dir, err = ioutil.TempDir(old_pwd, dir)
 	chk(err)
 
 	err = os.Chdir(test_dir)
 	chk(err)
 
 	SetVerboseLevel(255)
+}
 
-	t.Logf("Running tests in %s", test_dir)
+func TestPrepare(t *testing.T) {
+	prepare("tmp-test")
 }
 
 func TestUUID(t *testing.T) {
@@ -66,7 +68,7 @@ func TestUUID(t *testing.T) {
 	t.Logf("Got uuid %s", uuid)
 }
 
-func TestCreate(t *testing.T) {
+func create() {
 	size := "384M"
 	var p CreateParam
 
@@ -83,13 +85,21 @@ func TestCreate(t *testing.T) {
 	}
 }
 
-func TestOpen(t *testing.T) {
+func TestCreate(t *testing.T) {
+	create()
+}
+
+func open() {
 	var e error
 
 	d, e = Open("DiskDescriptor.xml")
 	if e != nil {
 		abort("Open: %s", e)
 	}
+}
+
+func TestOpen(t *testing.T) {
+	open()
 }
 
 func TestMount(t *testing.T) {
