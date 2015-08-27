@@ -30,7 +30,7 @@ The following methods differ:
 
 For most operations such as ``Create``, ``Mount``, ``Snapshot`` etc., there is no noticeable difference in performance, as these operations are pretty time consuming per se, so fork/exec overhead is negligible.
 
-Some quick testing (inside a VM on a laptop) shows that 
+Some quick testing (inside a VM on a laptop) shows that
 * method ``IsMounted()`` is about 25 times slower
 * method ``FSInfo()`` is about 5 times slower
 * method ``ImageInfo()`` is about 10 times slower
