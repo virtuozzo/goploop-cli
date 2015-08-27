@@ -19,6 +19,7 @@ const (
 	NoConsole          = -2
 	NoStdout           = -1
 	Timestamps         = 4
+	ShowCommands       = 5
 )
 
 var verbosity = unsetVerbosity

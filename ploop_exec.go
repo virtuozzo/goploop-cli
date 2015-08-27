@@ -24,7 +24,9 @@ func ploopRunCmd(stdout io.Writer, args ...string) error {
 	cmd.Stdout = stdout
 	cmd.Stderr = &stderr
 
-	fmt.Printf("Run: %s\n", strings.Join([]string{cmd.Path, strings.Join(cmd.Args[1:], " ")}, " "))
+	if verbosity >= ShowCommands {
+		fmt.Printf("Run: %s\n", strings.Join([]string{cmd.Path, strings.Join(cmd.Args[1:], " ")}, " "))
+	}
 
 	err := cmd.Run()
 	if err == nil {
