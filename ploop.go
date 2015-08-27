@@ -263,18 +263,23 @@ func (d Ploop) Replace(p *ReplaceParam) error {
 // device:	/dev/ploop25579
 var reDevice = regexp.MustCompile(`(?m)^device:\s+(/dev/ploop\d+)$`)
 
-// IsMounted returns true if ploop is mounted
-func (d Ploop) IsMounted() (bool, error) {
-	mounted := false
+func (d Ploop) getDevice() (string, error) {
+	dev := ""
 	out, err := ploopOut("-v-1", "info", "-d", d.dd)
 	if err == nil {
 		// Figure out what device we have
 		m := reDevice.FindStringSubmatch(out)
 		if len(m) > 1 {
-			mounted = true
+			dev = m[1]
 		}
 	}
-	return mounted, err
+	return dev, err
+}
+
+// IsMounted returns true if ploop is mounted
+func (d Ploop) IsMounted() (bool, error) {
+	dev, err := d.getDevice()
+	return dev != "", err
 }
 
 // FSInfoData holds information about ploop inner file system
