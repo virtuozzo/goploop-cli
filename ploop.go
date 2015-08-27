@@ -141,7 +141,10 @@ type MountParam struct {
 	Fsck     bool   // do fsck before mounting inner FS
 }
 
-var reAddDelta = regexp.MustCompile(`(?m)^Adding delta dev=(/dev/ploop\d+) `)
+// Input is like this (with or without a timestamp, depending on verbosity):
+// [ 0.001234] Adding delta dev=/dev/ploop12345 ...
+// Adding delta dev=/dev/ploop12345 ...
+var reAddDelta = regexp.MustCompile(`(?m)^(?:\[[0-9. ]+\] )*Adding delta dev=(/dev/ploop\d+) `)
 
 // Mount creates a ploop device and (optionally) mounts it
 func (d Ploop) Mount(p *MountParam) (string, error) {
