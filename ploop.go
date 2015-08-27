@@ -114,7 +114,7 @@ func Create(p *CreateParam) error {
 
 	args := []string{"init", "-s", strconv.FormatUint(p.Size, 10) + "K"}
 	if p.Mode != "" {
-		args = append(args, "-m", string(p.Mode))
+		args = append(args, "-f", string(p.Mode))
 	}
 	if p.CLog != 0 {
 		// ploop cluster block size, in 512-byte sectors
