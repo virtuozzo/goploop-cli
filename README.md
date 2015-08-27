@@ -17,7 +17,6 @@ are:
 * goploop-cli currently have some limitations (see below)
 
 Due to command line tool limitations, the following methods are currently not implemented, as compared to goploop:
-* ``SetVerboseLevel()`` don't do anything
 * ``SetLogFile()`` and ``SetLogLevel()`` are missing
 * ``GetTopDelta()`` is missing
 * ``SnapshotSwitchExtended()`` is missing

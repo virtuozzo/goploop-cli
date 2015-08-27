@@ -15,17 +15,19 @@ type Ploop struct {
 
 // Possible SetVerboseLevel arguments
 const (
-	Unset      int = -111
-	NoConsole      = -2
-	NoStdout       = -1
-	Timestamps     = 4
+	unsetVerbosity int = -111
+	NoConsole          = -2
+	NoStdout           = -1
+	Timestamps         = 4
 )
 
-var verbosity = Unset
+var verbosity = unsetVerbosity
+var verbosityOpt = []string{""}
 
 // SetVerboseLevel sets a level of verbosity when logging to stdout/stderr
 func SetVerboseLevel(v int) {
 	verbosity = v
+	verbosityOpt = []string{"-v" + strconv.Itoa(verbosity)}
 }
 
 var once sync.Once

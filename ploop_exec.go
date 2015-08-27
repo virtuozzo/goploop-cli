@@ -11,6 +11,14 @@ import (
 )
 
 func ploopRunCmd(stdout io.Writer, args ...string) error {
+	if verbosity != unsetVerbosity {
+		if !strings.HasPrefix(args[0], "-v") {
+			args = append(verbosityOpt, args...)
+		}
+		if verbosity > NoStdout && stdout == nil {
+			stdout = os.Stdout
+		}
+	}
 	var stderr bytes.Buffer
 	cmd := exec.Command("ploop", args...)
 	cmd.Stdout = stdout
@@ -37,11 +45,21 @@ func ploopRunCmd(stdout io.Writer, args ...string) error {
 }
 
 func ploop(args ...string) error {
-	return ploopRunCmd(os.Stdout, args...)
+	return ploopRunCmd(nil, args...)
 }
 
 func ploopOut(args ...string) (string, error) {
 	var stdout bytes.Buffer
+	// Output is reqired, make sure verbosity is not negative
+	if verbosity < 0 {
+		v := []string{"-v0"}
+		args = append(v, args...)
+	}
 	ret := ploopRunCmd(&stdout, args...)
-	return stdout.String(), ret
+	out := stdout.String()
+	// if verbosity requires so, print command's stdout
+	if verbosity > NoStdout {
+		fmt.Printf("%s", out)
+	}
+	return out, ret
 }
