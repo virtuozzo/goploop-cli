@@ -7,10 +7,6 @@ import (
 	"strconv"
 )
 
-var (
-	ploopVolumeBinary = "/usr/sbin/ploop-volume"
-)
-
 type PloopVolume struct {
 	Path string
 }
