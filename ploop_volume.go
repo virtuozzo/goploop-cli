@@ -7,10 +7,6 @@ import (
 	"strconv"
 )
 
-var (
-	ploopVolumeBinary = "/usr/sbin/ploop-volume"
-)
-
 type PloopVolume struct {
 	Path string
 }
@@ -20,12 +16,13 @@ type PloopVolumeSnapshot struct {
 }
 
 func checkDD(src string) error {
-	if _, err := os.Stat(path.Join(src, "DiskDescriptor.xml")); os.IsNotExist(err) {
-		return &Err{c: -1, s: fmt.Sprintf("Bad ploop-volume path %s!", src)}
+	if _, err := os.Stat(path.Join(src, "DiskDescriptor.xml")); err != nil {
+		return &Err{c: -1, s: fmt.Sprintf("Bad ploop-volume path: %s", src)}
 	}
 	return nil
 }
 
+/* PloopVolumeOpen opens a ploop volume and returns its object */
 func PloopVolumeOpen(src string) (*PloopVolume, error) {
 	if err := checkDD(src); err != nil {
 		return nil, err
@@ -33,6 +30,7 @@ func PloopVolumeOpen(src string) (*PloopVolume, error) {
 	return &PloopVolume{src}, nil
 }
 
+/* PloopVolumeSnapshotOpen opens a snapshot and returns its object */
 func PloopVolumeSnapshotOpen(src string) (*PloopVolumeSnapshot, error) {
 	if err := checkDD(src); err != nil {
 		return nil, err
@@ -40,11 +38,8 @@ func PloopVolumeSnapshotOpen(src string) (*PloopVolumeSnapshot, error) {
 	return &PloopVolumeSnapshot{src}, nil
 }
 
+/* PloopVolumeCreate creates a new volume and returns its object */
 func PloopVolumeCreate(src string, size uint64, image string) (*PloopVolume, error) {
-	if _, err := os.Stat(src); !os.IsNotExist(err) {
-		return nil, &Err{c: -1, s: fmt.Sprintf("Destination ploop directory already exists %s!", src)}
-	}
-
 	args := []string{"create", "-s", strconv.FormatUint(size, 10) + "K"}
 	if image != "" {
 		args = append(args, "--image", image)
@@ -56,9 +51,10 @@ func PloopVolumeCreate(src string, size uint64, image string) (*PloopVolume, err
 	return &PloopVolume{src}, nil
 }
 
+/* Snapshot creates a new snapshot in a specified directory */
 func (pv *PloopVolume) Snapshot(dst string) (*PloopVolumeSnapshot, error) {
 	if dst == "" {
-		return nil, &Err{c: -1, s: fmt.Sprintf("Bad destination path!")}
+		return nil, &Err{c: -1, s: "The destination path is empty"}
 	}
 	err := ploopVolume("snapshot", pv.Path, dst)
 	if err != nil {
@@ -67,6 +63,7 @@ func (pv *PloopVolume) Snapshot(dst string) (*PloopVolumeSnapshot, error) {
 	return &PloopVolumeSnapshot{dst}, nil
 }
 
+/* Switch switches a specified volume to the current snapshot */
 func (pvs *PloopVolumeSnapshot) Switch(pv PloopVolume) error {
 	if err := checkDD(pv.Path); err != nil {
 		return err
@@ -77,6 +74,7 @@ func (pvs *PloopVolumeSnapshot) Switch(pv PloopVolume) error {
 	return ploopVolume("switch", pvs.Path, pv.Path)
 }
 
+/* Clone creates a new ploop volume based on the current snapshot */
 func (pvs *PloopVolumeSnapshot) Clone(dst string) (*PloopVolume, error) {
 	if err := checkDD(pvs.Path); err != nil {
 		return nil, err
